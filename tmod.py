@@ -8,6 +8,13 @@ A collection of useful functions
 
 import os
 
+def find_in_file(textfile, pattern = "\d\d\d_\d\d\d_\d\d\d\d_\D\D\D\D_\D\D\D\d\d\d"):
+	'''
+ 	accepts a text file and regex pattern. returns a list of matches
+ 	'''
+	with open(textfile, "r") as f:
+		return(re.findall(pattern,f.read()))
+
 def crawl_dir(inpath,file_ending=''):
     '''
     inpath is a string representing a DIRECTORY on the file system
