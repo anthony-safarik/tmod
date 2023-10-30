@@ -8,6 +8,9 @@ A collection of useful functions
 
 import os
 
+def this_path():
+	return (os.path.dirname(os.path.abspath(__file__)))
+
 def find_in_file(textfile, pattern = "\d\d\d_\d\d\d_\d\d\d\d_\D\D\D\D_\D\D\D\d\d\d"):
 	'''
  	accepts a text file and regex pattern. returns a list of matches
