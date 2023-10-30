@@ -6,7 +6,7 @@ Created on Tue Nov 9 2019
 A collection of useful functions
 """
 
-import os
+import os, re
 
 def this_path():
 	return (os.path.dirname(os.path.abspath(__file__)))
