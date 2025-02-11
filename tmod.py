@@ -7,6 +7,7 @@ A collection of useful functions
 """
 
 import os, re
+from pathlib import Path
 
 def this_path():
 	return (os.path.dirname(os.path.abspath(__file__)))
@@ -17,6 +18,15 @@ def find_in_file(textfile, pattern = "\d\d\d_\d\d\d_\d\d\d\d_\D\D\D\D_\D\D\D\d\d
  	'''
 	with open(textfile, "r") as f:
 		return(re.findall(pattern,f.read()))
+
+def gen_paths(input_path):
+    """
+    Walk through the directory and generate Posix paths for files.
+    """
+    if os.path.isdir(input_path):
+        for root, dirs, files in os.walk(input_path):
+            for file_name in files:
+                yield Path(root) / file_name
 
 def crawl_dir(inpath,file_ending=''):
     '''
@@ -47,7 +57,3 @@ def get_basenames(list_of_file_paths):
         bname = os.path.basename(file_path)
         bnames.append(bname)
     return bnames
-
-
-
-#fpaths = crawl_dir('/Users/anthonysafarik/Projects/EdX_CS_Python','.py')
