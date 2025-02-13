@@ -27,10 +27,6 @@ if __name__ == "__main__":
         print("Discovered files:")
         for file in found_files:
             print(file)
-            # I dislike all the spaces and dots in Mac Screenshots.
-            bname = os.path.basename(file)
-            newname = bname.replace(' ','_').replace('.', '-', 2)
-            print(newname)
 
     else:
         print("No matching files found.")
