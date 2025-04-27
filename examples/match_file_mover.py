@@ -65,3 +65,5 @@ if __name__ == "__main__":
             file.write("temp file for testing only")
 
     compare_and_move_matching_files(src_folder, cmp_folder, move_folder)
+
+    if os.path.isdir("temp"): shutil.rmtree("temp")
