@@ -41,9 +41,8 @@ def move_videos_preserve_structure(src_dir, tgt_dir):
 
                 if not os.path.exists(tgt_file_path):
                     os.makedirs(os.path.dirname(tgt_file_path), exist_ok=True)
-                    # shutil.copy2(src_file_path, tgt_file_path)
                     os.rename(src_file_path, tgt_file_path)
-                    print(f"Copied: {relative_path}")
+                    print(f"Moved: {tgt_file_path}")
                 else:
                     print(f"Skipped (already exists): {relative_path}")
 

@@ -6,8 +6,21 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 import piexif
 import hashlib
+import csv
+import shutil
 
-SUPPORTED_EXTENSIONS = {'.jpg', '.jpeg', '.arw', '.dng'}
+# SUPPORTED_EXTENSIONS = {'.jpg', '.jpeg', '.arw', '.dng'}
+SUPPORTED_EXTENSIONS = {'.jpg', '.jpeg'}
+
+def get_file_size(file_path):
+    """
+    Returns the size of the file at the given file_path in bytes.
+    """
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError(f"The file '{file_path}' does not exist or is not a regular file.")
+    
+    return os.path.getsize(file_path)
+
 
 def calc_md5(file_path):
     """Calculate the MD5 hash of a file."""
@@ -74,29 +87,38 @@ def get_image_resolution(filepath):
 
     return None
 
-
-def scan_directory_for_photos(directory):
+def scan_directory_for_photos(directory, output_csv="photo_metadata.csv"):
     directory = Path(directory)
     print(f"Scanning directory: {directory}\n")
 
-    for file_path in directory.rglob("*"):
-        if file_path.is_file() and file_path.suffix.lower() in SUPPORTED_EXTENSIONS:
+    # Open CSV file for writing
+    with open(output_csv, mode='w', newline='', encoding='utf-8') as csvfile:
+        fieldnames = ['file_path', 'date_taken', 'resolution', 'md5', 'file_size']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for file_path in directory.rglob("*"):
+            if not file_path.is_file():
+                continue
+
+            if file_path.name.startswith("._"):
+                continue  # Skip macOS dot-underscore files
+
+            if file_path.suffix.lower() not in SUPPORTED_EXTENSIONS:
+                continue
+
             date_taken = get_exif_date(file_path)
             resolution = get_image_resolution(file_path)
             md5 = calc_md5(file_path)
-            if date_taken:
-                print(f"{file_path} -> Taken on: {date_taken}")
-            else:
-                print(f"{file_path} -> Date taken: Not found")
-            if resolution:
-                print(f"{file_path} -> Resolution: {resolution}")
-            else:
-                print(f"{file_path} -> Resolution: Not found")
-            if md5:
-                print(f"{file_path} -> md5: {md5}")
-            else:
-                print(f"{file_path} -> md5: Not found")
-            
+            file_size = get_file_size(file_path)
+
+            writer.writerow({
+                'file_path': str(file_path),
+                'date_taken': date_taken if date_taken else 'XXXX',
+                'resolution': f"{resolution[0]}x{resolution[1]}" if resolution else '0x0',
+                'md5': md5 if md5 else 'null',
+                'file_size': file_size if file_size else 'null'
+            })
 
 if __name__ == "__main__":
     import argparse
@@ -106,3 +128,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     scan_directory_for_photos(args.directory)
+    shutil.copy2("photo_metadata.csv", f"photo_metadata_{args.directory.replace('/','-')}.csv")

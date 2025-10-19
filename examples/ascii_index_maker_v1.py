@@ -11,7 +11,7 @@ def sanitize_filename(name):
     # Remove non-alphanumeric characters
     base_clean = re.sub(r'[^A-Za-z0-9\-_]', '', base_ascii)
     # Return the cleaned filename with the original extension
-    return f"{base_clean}{ext.lower()}"
+    return f"{base_clean}{ext}"
 
 def make_file_index(folder_path):
     file_index = os.path.join(folder_path,"file_index.txt")
@@ -20,8 +20,7 @@ def make_file_index(folder_path):
 
     for fname in os.listdir(folder_path):
         fpath = os.path.join(folder_path,fname)
-        if os.path.isfile(fpath):
-            #   file_list.append(fpath)
+        if os.path.isfile(fpath) and not fname.startswith('.'): #skip hidden files
               file_list.append(fname)
 
     formatted_list = []
@@ -40,7 +39,10 @@ def make_file_index(folder_path):
             print(f, formatted)
             counter += 1
             # textfile.write(f"{f}\t{os.path.join(folder_path,formatted)}\n")
-            textfile.write(f"{f}\t{formatted}\n")
+            if not f == formatted:
+                textfile.write(f"{f}\t{formatted}\n")
+
+    return file_index
 
 def main():
     parser = argparse.ArgumentParser(description="Create an ascii file index.")

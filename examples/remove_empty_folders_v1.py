@@ -14,7 +14,7 @@ def remove_empty_folders_and_ds_store(directory):
     for root, dirs, files in os.walk(directory, topdown=False):
         # Remove .DS_Store files
         for file_name in files:
-            if file_name == '.DS_Store' or file_name == 'Thumbs.db' or file_name == '.picasa.ini':
+            if file_name == '.DS_Store' or file_name == 'Thumbs.db' or file_name == '.picasa.ini' or file_name.endswith('.xmp'):
                 file_path = os.path.join(root, file_name)
                 try:
                     os.remove(file_path)
