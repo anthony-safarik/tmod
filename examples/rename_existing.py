@@ -1,5 +1,4 @@
-# move files in SRC existing in REF to DST
-
+# this script moves files in src existing in ref to dst
 import os
 from pathlib import Path
 
