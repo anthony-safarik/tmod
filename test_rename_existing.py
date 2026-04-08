@@ -1,4 +1,3 @@
-# TODO wrap it up, figure out logic and if archiver should be a class or whatever, consider storing the last known bucket name and loading that mani first, figure out storing the config 
 import unittest
 import os
 import shutil
@@ -6,7 +5,7 @@ from pathlib import Path
 from examples import rename_existing
 
 
-class TestArchiver(unittest.TestCase):
+class TestRenameExisting(unittest.TestCase):
     """Basic test cases."""
 
     def create_files(base: Path, files):
